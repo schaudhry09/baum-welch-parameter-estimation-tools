@@ -48,3 +48,10 @@ The trade-off: initial state probabilities are held fixed across iterations rath
 ## The awkward edge
 
 Observation sequences are integer indices into `n_symbols`, not raw tokens. A symbol index outside `range(n_symbols)` raises `ValueError` immediately — the library will not silently produce NaNs. Convergence is judged on the absolute change in log-likelihood between iterations (`tol`), not a relative threshold, so pick `tol` with that in mind.
+
+## Performance
+
+The window keeps a bounded buffer, so `push` is constant time and memory does not
+grow with the length of the stream. `peak` and `trough` are linear in the window
+size, which is the trade that keeps `push` cheap.
+
